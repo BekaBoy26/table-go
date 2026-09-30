@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useStore } from "./store";
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://table-go-back.onrender.com";
 
 const GOOGLE_LOGIN_URL = `${API_URL}/auth/google`;
 
