@@ -18,7 +18,12 @@ const fields = [
   { name: "name", label: "Restaurant name", placeholder: "Bella Italia", required: true },
   { name: "address", label: "Address", placeholder: "Chuy Avenue 123", required: true },
   { name: "gisAddress", label: "Address in 2GIS (Russian)", placeholder: "проспект Чуй, 123" },
-  { name: "workTime", label: "Opening hours", placeholder: "Mon–Sun: 12:00–23:00" },
+  {
+    name: "workTime",
+    label: "Opening hours",
+    placeholder: "Mon–Sun: 12:00–23:00",
+    hint: "Guests can book within these hours. If they can't be read, 10:00–22:00 is used.",
+  },
   { name: "priceMin", label: "Min price (KGS)", placeholder: "1000", type: "number" },
   { name: "priceMax", label: "Max price (KGS)", placeholder: "5000", type: "number" },
   { name: "phone", label: "Phone", placeholder: "+996 312 456 789", type: "tel" },
@@ -103,6 +108,7 @@ const Form = ({ restaurant }: { restaurant?: Restaurant }) => {
             required={"required" in f}
             className="h-10 rounded-xl"
           />
+          {"hint" in f && <span className="mt-1.5 block text-xs text-muted-foreground">{f.hint}</span>}
         </label>
       ))}
 
