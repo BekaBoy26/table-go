@@ -27,7 +27,7 @@ const useTableMutation = <T>(restaurantId: string, fn: (input: T) => Promise<unk
       Promise.all([
         queryClient.invalidateQueries({ queryKey: key(restaurantId) }),
         queryClient.invalidateQueries({ queryKey: ["restaurants"] }),
-        queryClient.invalidateQueries({ queryKey: ["bookings", "availability"] }),
+        queryClient.invalidateQueries({ queryKey: ["bookings", "occupancy"] }),
       ]),
   });
 };

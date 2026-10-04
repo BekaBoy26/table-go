@@ -125,7 +125,7 @@ const TableAvailability = ({ restaurantId }: { restaurantId: string }) => {
                             </span>
                           ) : (
                             <Link
-                              href={`/restaurant/${restaurantId}/book?date=${date}&time=${t}&guests=${Math.min(2, tb.capacity)}`}
+                              href={`/restaurant/${restaurantId}/book?date=${date}&time=${t}&table=${tb.id}&guests=${Math.min(2, tb.capacity)}`}
                               className={cn(cell, "bg-success/15 text-success hover:bg-success/25")}
                               title={`Table #${tb.number} is free at ${t} — book`}
                             >

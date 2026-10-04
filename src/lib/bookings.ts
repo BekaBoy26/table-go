@@ -16,6 +16,8 @@ export type Booking = {
   date: string;
   /** "HH:mm" */
   time: string;
+  /** The table is held from `time` for this many hours. */
+  hours: number;
   guests: number;
   note: string | null;
   status: BookingStatus;
@@ -23,33 +25,38 @@ export type Booking = {
   user: { name: string; email: string };
 };
 
-export type BookingInput = Pick<Booking, "restaurantId" | "date" | "time" | "guests"> & { note?: string };
-
-export type Slot = { time: string; available: boolean };
+export type BookingInput = Pick<Booking, "restaurantId" | "date" | "time" | "hours" | "guests"> & { tableId: string; note?: string };
 
 /** Which table is taken at which time on a day (public, no guest data). */
 export type Occupancy = {
   date: string;
+  /** Hourly start times within the restaurant's working hours. */
   times: string[];
   /** Slots that can't be booked any more: already started or outside the booking window. */
   closed: string[];
+  /** `booked`: hourly slots overlapped by an active booking. */
   tables: { id: string; number: number; capacity: number; isAvailable: boolean; booked: string[] }[];
 };
 
 /** Same limits as the API (backend/src/bookings/slots.ts). */
 export const MAX_GUESTS = 12;
 export const BOOKING_WINDOW_DAYS = 14;
+export const MAX_HOURS = 4;
 
 const keys = {
   all: ["bookings"] as const,
   mine: (token: string | null) => ["bookings", "mine", token] as const,
   admin: ["bookings", "admin"] as const,
-  availability: (restaurantId: string, date: string, guests: number) =>
-    ["bookings", "availability", restaurantId, date, guests] as const,
   occupancy: (restaurantId: string, date: string) => ["bookings", "occupancy", restaurantId, date] as const,
 };
 
 export const isPast = (b: Pick<Booking, "date" | "time">) => new Date(`${b.date}T${b.time}`) < new Date();
+/** "18:00–20:00" */
+export const timeRange = ({ time, hours }: Pick<Booking, "time" | "hours">) => {
+  const [h, m] = time.split(":");
+  return `${time}–${String((Number(h) + hours) % 24).padStart(2, "0")}:${m}`;
+};
+
 export const isUpcoming = (b: Booking) => b.status === "CONFIRMED" && !isPast(b);
 
 export const useMyBookings = () => {
@@ -65,15 +72,6 @@ export const useAllBookings = () =>
   useQuery({
     queryKey: keys.admin,
     queryFn: async () => (await api.get<Booking[]>("/bookings")).data,
-  });
-
-export const useAvailability = (restaurantId: string, date: string, guests: number) =>
-  useQuery({
-    queryKey: keys.availability(restaurantId, date, guests),
-    queryFn: async () =>
-      (await api.get<Slot[]>("/bookings/availability", { params: { restaurantId, date, guests } })).data,
-    // slots fill up while the page is open (pushed over the socket, see realtime.ts)
-    staleTime: 0,
   });
 
 export const useOccupancy = (restaurantId: string, date: string) =>

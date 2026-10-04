@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RestaurantImage from "@/components/shared/RestaurantImage";
 import Status from "@/components/shared/Status";
 import { Restaurant, errorMessage, hasLocation, useDeleteRestaurant, useRestaurants } from "@/lib/restaurants";
-import { Booking, isUpcoming, useAllBookings, useCancelBooking } from "@/lib/bookings";
+import { Booking, isUpcoming, timeRange, useAllBookings, useCancelBooking } from "@/lib/bookings";
 import { formatDate } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
 
@@ -70,7 +70,7 @@ const BookingRow = ({ booking: b }: { booking: Booking }) => {
         <p className="text-xs text-muted-foreground">{b.user.email}</p>
       </td>
       <td className="px-5 py-4 whitespace-nowrap">
-        {formatDate(b.date)} · {b.time}
+        {formatDate(b.date)} · {timeRange(b)}
       </td>
       <td className="px-5 py-4">#{b.tableNumber}</td>
       <td className="px-5 py-4">{b.guests}</td>

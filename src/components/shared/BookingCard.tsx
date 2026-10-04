@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Booking, isUpcoming, useCancelBooking } from "@/lib/bookings";
+import { Booking, isUpcoming, timeRange, useCancelBooking } from "@/lib/bookings";
 import { formatDate } from "@/lib/data";
 import { errorMessage } from "@/lib/restaurants";
 import RestaurantImage from "./RestaurantImage";
@@ -14,7 +14,7 @@ const BookingCard = ({ booking: b }: { booking: Booking }) => {
 
   const stats = [
     ["Table", `#${b.tableNumber}`],
-    ["Date · Time", `${formatDate(b.date)} · ${b.time}`],
+    ["Date · Time", `${formatDate(b.date)} · ${timeRange(b)}`],
     ["Guests", b.guests],
   ];
 
