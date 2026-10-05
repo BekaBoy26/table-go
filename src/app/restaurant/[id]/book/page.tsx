@@ -231,13 +231,14 @@ const SummaryRows = ({ rows }: { rows: string[][] }) =>
   ));
 
 const Confirmed = ({ booking: b, address }: { booking: Booking; address: string }) => {
+  // wall-clock time; ctz below tells Google Calendar it is Bishkek time
   const start = new Date(`${b.date}T${b.time}`);
   const stamp = (d: Date) => format(d, "yyyyMMdd'T'HHmmss");
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
     `Table at ${b.restaurantName}`,
   )}&dates=${stamp(start)}/${stamp(addHours(start, b.hours))}&details=${encodeURIComponent(
     `Reservation ${b.code}, table #${b.tableNumber}, ${b.guests} guests`,
-  )}&location=${encodeURIComponent(`${address}, Bishkek`)}`;
+  )}&location=${encodeURIComponent(`${address}, Bishkek`)}&ctz=Asia/Bishkek`;
 
   return (
     <div className="mx-auto flex max-w-md flex-col items-center text-center">

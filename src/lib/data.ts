@@ -21,6 +21,7 @@ export const CUISINES = [
   "Georgian",
   "Korean",
   "Chinese",
+  "Indian",
   // other popular ones
   "Japanese",
   "Asian",

@@ -50,7 +50,10 @@ const keys = {
   occupancy: (restaurantId: string, date: string) => ["bookings", "occupancy", restaurantId, date] as const,
 };
 
-export const isPast = (b: Pick<Booking, "date" | "time">) => new Date(`${b.date}T${b.time}`) < new Date();
+/** Bookings are in Bishkek time (UTC+6, no DST), whatever the visitor's own time zone. */
+export const startsAt = (b: Pick<Booking, "date" | "time">) => new Date(`${b.date}T${b.time}:00+06:00`);
+
+export const isPast = (b: Pick<Booking, "date" | "time">) => startsAt(b) < new Date();
 /** "18:00–20:00" */
 export const timeRange = ({ time, hours }: Pick<Booking, "time" | "hours">) => {
   const [h, m] = time.split(":");
