@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TableGo — Restaurant Booking",
+  title: "TableGo",
   description: "Find a restaurant and book a table in a few clicks",
 };
 
